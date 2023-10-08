@@ -7,18 +7,14 @@
     {{ form.as_p }}
     <button type="submit" class="btn btn-primary">Add Task</button>
 </form>
-<h2 class="mt-4">Task List</h2>
 
+<h2 class="mt-4">Pending Tasks</h2>
 <ul class="list-group my-3">
-    {% for task in tasks %}
+    {% for task in pending_tasks %}
     <li class="list-group-item">
         <a href="{% url 'task_detail' task.id %}">{{ task.title }}</a>
-        {% if task.completed %}
-        <span class="badge badge-success">Completed</span>
-        {% else %}
         <span class="badge badge-warning">Pending</span>
-        {% endif %}
-        <p class="d-inline">Due : {{ task.due_date }}</p>
+        <p class="d-inline">Due: {{ task.due_date }}</p>
         <form method="post" action="{% url 'mark_completed' task.id %}" class="d-inline float-right">
             {% csrf_token %}
             <button type="submit" class="btn btn-success btn-sm">Completed</button>
@@ -26,7 +22,40 @@
         <a href="{% url 'task_delete' task.id %}" class="btn btn-danger btn-sm float-right mx-2 ml-2">Delete</a>
     </li>
     {% empty %}
-    <li class="list-group-item">No tasks yet.</li>
+    <li class="list-group-item">No pending tasks.</li>
     {% endfor %}
 </ul>
+
+<h2 class="mt-4">Completed Tasks</h2>
+<ul class="list-group my-3">
+    {% for task in completed_tasks %}
+    <li class="list-group-item">
+        <a href="{% url 'task_detail' task.id %}">{{ task.title }}</a>
+        <span class="badge badge-success">Completed</span>
+        <p class="d-inline">Due: {{ task.due_date }}</p>
+        <a href="{% url 'task_delete' task.id %}" class="btn btn-danger btn-sm float-right ml-2">Delete</a>
+    </li>
+    {% empty %}
+    <li class="list-group-item">No completed tasks.</li>
+    {% endfor %}
+</ul>
+
+<h2 class="mt-4">Overdue Tasks</h2>
+<ul class="list-group my-3">
+    {% for task in overdue_tasks %}
+    <li class="list-group-item">
+        <a href="{% url 'task_detail' task.id %}">{{ task.title }}</a>
+        <span class="badge badge-danger">Overdue</span>
+        <p class="d-inline">Due: {{ task.due_date }}</p>
+        <form method="post" action="{% url 'mark_completed' task.id %}" class="d-inline float-right">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-success btn-sm">Completed</button>
+        </form>
+        <a href="{% url 'task_delete' task.id %}" class="btn btn-danger btn-sm float-right mx-2 ml-2">Delete</a>
+    </li>
+    {% empty %}
+    <li class="list-group-item">No overdue tasks.</li>
+    {% endfor %}
+</ul>
+
 {% endblock %}

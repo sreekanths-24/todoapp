@@ -4,6 +4,7 @@ from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from .models import *  # Import all models from models.py
 from .forms import *
+from django.utils import timezone
 
 # Existing views...
 
@@ -33,6 +34,7 @@ def edit_task(request, task_id):
     context = {'form': form, 'task': task}
     return render(request, 'edit_task.html', context)
 
+
 def task_list(request):
     if request.user.is_authenticated:
         tasks = Task.objects.filter(user=request.user)
@@ -46,7 +48,18 @@ def task_list(request):
                 task.save()
                 return redirect('task_list')
 
-        context = {'tasks': tasks, 'form': form}
+        # Filter tasks based on their status and due dates
+        pending_tasks = tasks.filter(completed=False, due_date__gt=timezone.now())
+        completed_tasks = tasks.filter(completed=True)
+        overdue_tasks = tasks.filter(completed=False, due_date__lt=timezone.now())
+
+        context = {
+            'form': form,
+            'pending_tasks': pending_tasks,
+            'completed_tasks': completed_tasks,
+            'overdue_tasks': overdue_tasks,
+        }
+
         return render(request, 'task_list.html', context)
     else:
         return redirect('signin')
