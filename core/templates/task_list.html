@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Task List</h2>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary">Add Task</button>
+</form>
+
+<ul class="list-group mt-3">
+    {% for task in tasks %}
+    <li class="list-group-item">
+        <a href="{% url 'task_detail' task.id %}">{{ task.title }}</a>
+        {% if task.completed %}
+        <span class="badge badge-success">Completed</span>
+        {% else %}
+        <span class="badge badge-warning">Pending</span>
+        {% endif %}
+        <a href="{% url 'task_delete' task.id %}" class="btn btn-danger btn-sm float-right ml-2">Delete</a>
+    </li>
+    {% empty %}
+    <li class="list-group-item">No tasks yet.</li>
+    {% endfor %}
+</ul>
+{% endblock %}
