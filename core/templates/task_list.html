@@ -17,7 +17,12 @@
         {% else %}
         <span class="badge badge-warning">Pending</span>
         {% endif %}
-        <a href="{% url 'task_delete' task.id %}" class="btn btn-danger btn-sm float-right ml-2">Delete</a>
+        <p class="d-inline">Due : {{ task.due_date }}</p>
+        <form method="post" action="{% url 'mark_completed' task.id %}" class="d-inline float-right">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-success btn-sm">Completed</button>
+        </form>
+        <a href="{% url 'task_delete' task.id %}" class="btn btn-danger btn-sm float-right mx-2 ml-2">Delete</a>
     </li>
     {% empty %}
     <li class="list-group-item">No tasks yet.</li>

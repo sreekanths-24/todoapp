@@ -5,6 +5,20 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from .models import *  # Import all models from models.py
 from .forms import *
 
+# Existing views...
+
+def mark_completed(request, task_id):
+    task = get_object_or_404(Task, id=task_id, user=request.user)
+
+    if request.method == 'POST':
+        task.completed = True
+        task.save()
+        return redirect('task_list')
+
+    # Handle GET requests or other cases here (if needed).
+
+# Other views...
+
 def edit_task(request, task_id):
     task = get_object_or_404(Task, id=task_id, user=request.user)
 

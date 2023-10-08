@@ -9,4 +9,5 @@ urlpatterns = [
     path('signin/', views.signin, name='signin'),
     path('signout/', views.signout, name='signout'),
     path('task/<int:task_id>/edit/', views.edit_task, name='edit_task'),
+    path('task/<int:task_id>/mark_completed/', views.mark_completed, name='mark_completed'),
 ]
