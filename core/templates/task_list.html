@@ -1,14 +1,15 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h2>Task List</h2>
+<h2>Add Task</h2>
 <form method="post">
     {% csrf_token %}
     {{ form.as_p }}
     <button type="submit" class="btn btn-primary">Add Task</button>
 </form>
+<h2 class="mt-4">Task List</h2>
 
-<ul class="list-group mt-3">
+<ul class="list-group my-3">
     {% for task in tasks %}
     <li class="list-group-item">
         <a href="{% url 'task_detail' task.id %}">{{ task.title }}</a>
